@@ -78,5 +78,44 @@ namespace WpfApp1
 
 
         }
+
+        private void Button_Click_2Zadanie(object sender, RoutedEventArgs e)
+        {
+            Thread lowpr = new Thread(() => CountNum("Lower", ThreadPriority.Lowest, textBlock1, progressBar1));
+            Thread normpr = new Thread(() => CountNum("Lower", ThreadPriority.Normal, textBlock2, progressBar2));
+            Thread highpr = new Thread(() => CountNum("Lower", ThreadPriority.Highest, textBlock3, progressBar3));
+
+            lowpr.Start();
+            normpr.Start();
+            highpr.Start();
+
+            new Thread(() =>
+            {
+                lowpr.Join();
+                normpr.Join();
+                highpr.Join();
+            }).Start();
+       
+        }
+        private void CountNum(string threadName, ThreadPriority priority, TextBlock textBlock, ProgressBar progressBar)
+        {
+            for (int i = 0; i <= 100; i++)
+            {
+                Thread.Sleep(100);
+                Dispatcher.Invoke(() =>
+                {
+                    textBlock.Text = $"{threadName} {priority} {i}";
+                    progressBar.Value = i;
+                });
+                if (i == 100)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        textBlock.Text = $"{threadName} {priority} Зaвершено";
+                    });
+                }
+                
+            }
+        }
     }
 }

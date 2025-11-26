@@ -7,7 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel HorizontalAlignment="Left">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0">
             <Button Content="Поток progressbar" 
         Height="50"
         Width="120"
@@ -18,7 +26,7 @@
                 Height="100"
                 Width="200"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Right" Margin="0 0 100 0">
+        <StackPanel Grid.Column="1">
             <Button Content="Поток с приоритетам" 
                     Height="50"
                     Width="120"
@@ -28,8 +36,23 @@
             <ProgressBar Height="100" Width="200" Margin="10"
                          x:Name="progres2"/>
             <TextBlock x:Name="textBlock"/>
-
-
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+            <Button Height="70" Width="100" Content="Запустить"
+                    Click="Button_Click_2Zadanie"/>
+            <WrapPanel Margin="50 10 0 0">
+                <ProgressBar Height="20" Width="100" Margin="100 0 0 0" 
+                             x:Name="progressBar1"/>
+                <ProgressBar Height="20" Width="100" Margin="100 0 0 0"
+                             x:Name="progressBar2"/>
+                <ProgressBar Height="20" Width="100" Margin="100 0 0 0"
+                             x:Name="progressBar3"/>
+            </WrapPanel>
+            <WrapPanel Margin="190 0 0 0 ">
+                <TextBlock Text="as" x:Name="textBlock1"/>
+                <TextBlock Text="as" Margin="190 0 0 0" x:Name="textBlock2"/>
+                <TextBlock Text="as" Margin="190 0 0 0" x:Name="textBlock3"/>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>
