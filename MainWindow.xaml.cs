@@ -55,7 +55,6 @@ namespace WpfApp1
                 {
                     Thread highPriority = new Thread(() =>
                     {
-                        // Начальное состояние
                         Dispatcher.Invoke(() =>
                         {
                             
@@ -63,22 +62,19 @@ namespace WpfApp1
                             textBlock.Text = $"Поток запущен с приоритетом: {ThreadPriority.Highest}";
                         });
 
-                        // Устанавливаем высокий приоритет
                         Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-                        // Заполняем первую половину прогресс-бара
                         for (int i = 0; i <= 50; i++)
                         {
-                            Thread.Sleep(30); // Меньшая задержка для плавности
+                            Thread.Sleep(30); 
                             Dispatcher.Invoke(() =>
                             {
                                 progres2.Value = i;
                             });
                         }
 
-                        Thread.Sleep(1000); // Пауза как в оригинальном коде
+                        Thread.Sleep(1000);
 
-                        // Меняем приоритет на нормальный
                         Thread.CurrentThread.Priority = ThreadPriority.Normal;
 
                         Dispatcher.Invoke(() =>
@@ -86,12 +82,11 @@ namespace WpfApp1
                             textBlock.Text = $"Приоритет изменен на: {ThreadPriority.Normal}";
                         });
 
-                        Thread.Sleep(1000); // Пауза как в оригинальном коде
+                        Thread.Sleep(1000); 
 
-                        // Заполняем вторую половину прогресс-бара
                         for (int i = 51; i <= 100; i++)
                         {
-                            Thread.Sleep(30); // Меньшая задержка для плавности
+                            Thread.Sleep(30); 
                             Dispatcher.Invoke(() =>
                             {
                                 progres2.Value = i;
@@ -99,7 +94,6 @@ namespace WpfApp1
                         }
 
 
-                        // Завершение
                         Dispatcher.Invoke(() =>
                         {
                             textBlock.Text = "Завершено!";
