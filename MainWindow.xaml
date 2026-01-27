@@ -37,9 +37,18 @@
                          x:Name="progres2"/>
             <TextBlock x:Name="textBlock"/>
         </StackPanel>
+        <Button Grid.Column="1" Width="120"
+                Height="50"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Content="Potoc without Despatcher"
+                x:Name="button2WitchoutDispather"
+                Click="button2WitchoutDispather_Click"
+                Margin="0 0 5 0"/>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
             <Button Height="70" Width="100" Content="Запустить"
-                    Click="Button_Click_2Zadanie"/>
+                    Click="Button_Click_2Zadanie"
+                    x:Name="ss"/>
             <WrapPanel Margin="50 10 0 0">
                 <ProgressBar Height="20" Width="100" Margin="100 0 0 0" 
                              x:Name="progressBar1"/>

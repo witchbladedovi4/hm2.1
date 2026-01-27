@@ -29,7 +29,8 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => 
+            butProgressBar.IsEnabled = false;
+            new Thread(() =>
             {
                 Dispatcher.Invoke(new Action(async () =>
                 {
@@ -38,49 +39,102 @@ namespace WpfApp1
                         await Task.Delay(30);
                         progress.Value = i;
                     }
+                    butProgressBar.IsEnabled = true;
                 }));
-                
+
             }).Start();
+            
         }
 
         private void Button_Click2(object sender, RoutedEventArgs e)
         {
-            Thread highProiotity = new Thread(M) 
+            try
             {
-                Name = "highProiotity",
-                Priority = ThreadPriority.Highest
-
-            };
-            highProiotity.Start();
-        }
-
-        private void M()
-        {
-            UpdateUI($"Поток запущен с приоритетом: {Thread.CurrentThread.Priority}");
-
-            Thread.Sleep(1000);
-
-            Thread.CurrentThread.Priority = ThreadPriority.Normal;
-            UpdateUI($"Поток запущен с приоритетом: {Thread.CurrentThread.Priority}");
-            Thread.Sleep(1000);
-        }
-
-        private void UpdateUI(string mes)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (progres2 != null)
+                progres2.Value = 0;
+                if (progres2.Value < 100)
                 {
-                    progres2.Value += 10;
-                    textBlock.Text = mes;
+                    Thread highPriority = new Thread(() =>
+                    {
+                        // Начальное состояние
+                        Dispatcher.Invoke(() =>
+                        {
+                            
+                            button2.IsEnabled = false;
+                            textBlock.Text = $"Поток запущен с приоритетом: {ThreadPriority.Highest}";
+                        });
+
+                        // Устанавливаем высокий приоритет
+                        Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
+                        // Заполняем первую половину прогресс-бара
+                        for (int i = 0; i <= 50; i++)
+                        {
+                            Thread.Sleep(30); // Меньшая задержка для плавности
+                            Dispatcher.Invoke(() =>
+                            {
+                                progres2.Value = i;
+                            });
+                        }
+
+                        Thread.Sleep(1000); // Пауза как в оригинальном коде
+
+                        // Меняем приоритет на нормальный
+                        Thread.CurrentThread.Priority = ThreadPriority.Normal;
+
+                        Dispatcher.Invoke(() =>
+                        {
+                            textBlock.Text = $"Приоритет изменен на: {ThreadPriority.Normal}";
+                        });
+
+                        Thread.Sleep(1000); // Пауза как в оригинальном коде
+
+                        // Заполняем вторую половину прогресс-бара
+                        for (int i = 51; i <= 100; i++)
+                        {
+                            Thread.Sleep(30); // Меньшая задержка для плавности
+                            Dispatcher.Invoke(() =>
+                            {
+                                progres2.Value = i;
+                            });
+                        }
+
+
+                        // Завершение
+                        Dispatcher.Invoke(() =>
+                        {
+                            textBlock.Text = "Завершено!";
+                            button2.IsEnabled = true;
+                        });
+
+
+                    })
+
+                    {
+                        Name = "highProiotity",
+                        Priority = ThreadPriority.Highest
+                    };
+
+                    highPriority.Start();
+
+
                 }
-            });
 
-
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                button2.IsEnabled = false;
+            }
+           
+            
         }
+
+      
 
         private void Button_Click_2Zadanie(object sender, RoutedEventArgs e)
         {
+            ss.IsEnabled = false;
             Thread lowpr = new Thread(() => CountNum("Lower", ThreadPriority.Lowest, textBlock1, progressBar1));
             Thread normpr = new Thread(() => CountNum("Lower", ThreadPriority.Normal, textBlock2, progressBar2));
             Thread highpr = new Thread(() => CountNum("Lower", ThreadPriority.Highest, textBlock3, progressBar3));
@@ -95,7 +149,8 @@ namespace WpfApp1
                 normpr.Join();
                 highpr.Join();
             }).Start();
-       
+            
+
         }
         private void CountNum(string threadName, ThreadPriority priority, TextBlock textBlock, ProgressBar progressBar)
         {
@@ -112,10 +167,30 @@ namespace WpfApp1
                     Dispatcher.Invoke(() =>
                     {
                         textBlock.Text = $"{threadName} {priority} Зaвершено";
+                        ss.IsEnabled = true;
                     });
                 }
                 
             }
+        }
+
+        private void button2WitchoutDispather_Click(object sender, RoutedEventArgs e)
+        {
+            new Thread(() =>
+            {
+                try
+                {
+
+                    textBlock.Text = "Изменено из потока ";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+
+                }
+            }).Start();
+          
+
         }
     }
 }
